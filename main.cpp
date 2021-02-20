@@ -14,6 +14,15 @@ float timer;
 float timerLength = 0.04;
 bool paused = true;
 
+void clearMap(){
+    for(int i=0;i<=WIDTH;i++){
+        for(int j=0;j<=HEIGHT;j++){
+            lastMap[i][j] = 0;
+            map[i][j] = 0;  
+        }
+    }
+}
+
 void updateMap(int rows, int cols, bool map[WIDTH][HEIGHT]){
     for(int i=0;i<=WIDTH;i++){
         for(int j=0;j<=HEIGHT;j++){
@@ -51,7 +60,6 @@ void updateMap(int rows, int cols, bool map[WIDTH][HEIGHT]){
         }
     }
 }
-
 
 void drawTiles(int x,int y){
     for (size_t i = 0; i < sizeof(map)  / sizeof(*map); ++i)
@@ -96,6 +104,7 @@ void update(){
             int mouseXtile = floor(mouseY / TILESIZE);
             map[mouseXtile][mouseYtile] = !map[mouseXtile][mouseYtile];
         }
+        if (IsKeyPressed(KEY_C)) clearMap();
     }
 }
 
@@ -128,7 +137,6 @@ int main(void){
         draw();
     }
     CloseWindow();
-
 
     return 0;
 }
