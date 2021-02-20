@@ -2,11 +2,11 @@
 #include <cstddef>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdbool.h> 
+#include <math.h>
 
 #define WIDTH   80
 #define HEIGHT  80
-#define TILESIZE 8
+#define TILESIZE 10
 
 bool map[WIDTH][HEIGHT];
 bool lastMap[WIDTH][HEIGHT];
@@ -65,16 +65,37 @@ void drawTiles(int x,int y){
       }
     }
 }
+
+void drawGrid(){
+    for (int i = 1; i <= WIDTH; ++i){
+        DrawLineEx(Vector2{i * TILESIZE,0},Vector2{i * TILESIZE,HEIGHT * TILESIZE},1,LIGHTGRAY);
+    }
+    for (int i = 1; i <= HEIGHT; ++i){
+        DrawLineEx(Vector2{0,i * TILESIZE},Vector2{WIDTH * TILESIZE,i * TILESIZE},1,LIGHTGRAY);
+    }
+}
+
 void update(){
     float dt = GetFrameTime();
     if (!paused) timer += dt;
-    if (timer >= timerLength){
+    if (timer >= timerLength && !paused){
         updateMap(WIDTH,HEIGHT,map);
     }
-    timerLength += GetMouseWheelMove() * -0.005f;
+    if (timerLength >= 0 && timerLength <= 0.100001){
+        timerLength += GetMouseWheelMove() * -0.005f;
+    }
+    if (timerLength < 0) timerLength = 0;
+    if (timerLength > 0.1) timerLength = 0.1;
     if (IsKeyPressed(KEY_SPACE)) paused = !paused;
     if (paused){
         if (IsKeyPressed(KEY_S)) updateMap(WIDTH,HEIGHT,map);
+        if (IsMouseButtonPressed(0)){
+            int mouseX = GetMouseX();
+            int mouseY = GetMouseY();
+            int mouseYtile = floor(mouseX / TILESIZE);
+            int mouseXtile = floor(mouseY / TILESIZE);
+            map[mouseXtile][mouseYtile] = !map[mouseXtile][mouseYtile];
+        }
     }
 }
 
@@ -83,6 +104,8 @@ void draw(){
 
     ClearBackground(RAYWHITE);
     drawTiles(0,0);
+    if (paused) drawGrid();
+    DrawText(TextFormat("speed: %f", 100-1000*timerLength),5,5,20,BLUE);
     EndDrawing();
 }
 
@@ -94,11 +117,11 @@ int main(void){
 
     SetTargetFPS(60);
 
-    map[1+10][2+10] = 1;
-    map[2+10][3+10] = 1;
-    map[3+10][1+10] = 1;
-    map[3+10][2+10] = 1;
-    map[3+10][3+10] = 1;
+    map[11][12] = 1;
+    map[12][13] = 1;
+    map[13][11] = 1;
+    map[13][12] = 1;
+    map[13][13] = 1;
     while (!WindowShouldClose())
     {
         update();
