@@ -2,11 +2,11 @@
 	GOL - An implementation of Conway's Game of Life
 	Author:	Angus Wilson (angus.wilson13@education.nsw.gov.au)
 	Date:	March 2021
-
+	
 	This program uses the raylib library for graphics and input.
 	Information on compiling software with raylib can be found at the link:
 	https://github.com/raysan5/raylib/wiki
-
+	
 	Todo:
 	* Help screen showing all options
 	* Config file parsing and loading (width, height, tileSize)
@@ -15,7 +15,7 @@
 	  pentatonic scale, the other axis possibly controlling a filter envelope.
 	  Not strictly necessary but would be cool.
 */
-
+	
 #include "raylib.h"
 #include <stdlib.h>
 #include <stdbool.h>
@@ -100,7 +100,7 @@ void updateMap(int rows, int cols, bool map[width][height]){
 void drawTiles(int x,int y){
 	// Loop over the map with a different method because i didnt feel like passing in the tiles
 	for (size_t i = 0; i < sizeof(map)  / sizeof(*map); ++i)
-	for (size_t j = 0; j < sizeof(*map) / sizeof(**map);  ++j) {
+		for (size_t j = 0; j < sizeof(*map) / sizeof(**map);  ++j) {
 
 		// Draws a square at the correct position if the cell is alive
 		switch(map[i][j]) {
@@ -189,15 +189,15 @@ int main(void){
 	SetTargetFPS(60);
 
 	if (startupPattern){
-		/*
+		/*	
 			There is a glider pattern that shows up on startup by default
-
-			-----
+			
+			+---+
 			| # |  It looks like this.
 			|  #|
 			|###|
-			-----
-
+			+---+
+		
 			These are the positions on the map for the glider
 		*/
 		map[11][12] = 1;
