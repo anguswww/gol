@@ -15,7 +15,6 @@
 	  pentatonic scale, the other axis possibly controlling a filter envelope.
 	  Not strictly necessary but would be cool.
 */
-	
 #include "raylib.h"
 #include <stdlib.h>
 #include <stdbool.h>
@@ -53,6 +52,7 @@ void clearMap(){
 }
 
 // Updates the map with reference to the previous iteration
+// This may or may not require a rewrite for clarity.
 void updateMap(int rows, int cols, bool map[width][height]){
 	// Sets the values of lastMap to those in map.
 	// This used to be another function called cpymap()
@@ -67,7 +67,7 @@ void updateMap(int rows, int cols, bool map[width][height]){
 			// neighbours is -1 because the cell will count itself within it's own 3x3 area.
 			// Therefore neighbours will always be at least 0 for live cells.
 			// This is probably more efficient than an if condition in the 3x3 loop
-			int neighbours = -1;
+			int neighbours = -  0 - lastMap[i][j];
 
 			// Iterates over the 9 squares within the cell's 3x3 area and adds to neighbours
 			// if the cell is set to true. Essentially just counts neighbours in the 3x3 area.
@@ -89,7 +89,7 @@ void updateMap(int rows, int cols, bool map[width][height]){
 			// This is set to 2 instead of 3 by the rules of the game because all cells start
 			// counting neighbours at -1, therefore 3 = 2 for dead cells.
 			// this could be aleviated using an if statement but that would be a bit less efficient
-			else if(neighbours == 2){
+			else if(neighbours == 3){
 				map[i][j] = 1;
 			}
 		}
@@ -99,6 +99,7 @@ void updateMap(int rows, int cols, bool map[width][height]){
 // Draws the tilemap onto the screen at the specified coordinates
 void drawTiles(int x,int y){
 	// Loop over the map with a different method because i didnt feel like passing in the tiles
+	// Maybe not the best way to do it. Refactor so its done in a functional way? (no side effects)
 	for (size_t i = 0; i < sizeof(map)  / sizeof(*map); ++i)
 		for (size_t j = 0; j < sizeof(*map) / sizeof(**map);  ++j) {
 
@@ -142,7 +143,7 @@ void update(){
 		timerLength += GetMouseWheelMove() * -0.005f;
 	}
 	// Reset the timer if it escapes reasonable bounds
-	if (timerLength < 0) timerLength = 0; 
+	if (timerLength < 0) timerLength = 0;
 	if (timerLength > 0.1) timerLength = 0.1;
 
 	if (IsKeyPressed(KEY_SPACE)) paused = !paused; // Pause if space is pressed.
