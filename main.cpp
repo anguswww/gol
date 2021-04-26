@@ -40,6 +40,8 @@ float timer;
 float timerLength = 0.04;
 bool paused = true;
 
+bool showHelp = false;
+
 // Iterates through the map setting every value to 0 a.k.a false.
 // Called when the user presses c and the simulation is paused.
 void clearMap(){
